@@ -34,11 +34,15 @@ network() {
     sudo ip tuntap add dev tap1 mode tap user jelly
     sudo ip link set tap1 up
     sudo ip link set tap1 master qemubr0
+    sudo ip tuntap add dev tap2 mode tap user jelly
+    sudo ip link set tap2 up
+    sudo ip link set tap2 master qemubr0
 }
 
 del-network() {
     sudo ip link del tap0 
     sudo ip link del tap1 
+    sudo ip link del tap2 
     sudo ip link del qemubr0 
 }
 
