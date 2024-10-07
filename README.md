@@ -1,4 +1,4 @@
-# VM and initrmfs image setup
+# VM and initramfs image setup
 ```bash
 qemu-img create -f raw archlinux_disk.img 5G
 mkfs.ext4 archlinux_disk.img
@@ -13,6 +13,7 @@ mkinitcpio -k /path/to/bzImage -c mkinitcpio.conf -g initramfs.img
 ```
 
 https://www.collabora.com/news-and-blog/blog/2019/03/20/bootstraping-a-minimal-arch-linux-image/
+
 For initramfs: https://m47r1x.github.io/posts/linux-boot/
 
 # Inside VM configuration
@@ -27,7 +28,7 @@ reboot
 - If you want to make the vm appear in the lan:
     - Set the bridge as using dhcp 
     - Set enp34s as the bridge's slave
-    - Now the bridge has taken the place of enp34s0. It has an ip in the lan (enp23s0 doesn't)
+    - Now the bridge has taken the place of enp34s0. It has an ip in the lan (enp34s0 doesn't)
 - If you want to make the vm local to the pc, while still being able to talk to the outside:
     - Give the bridge a static ip 
     - Set the bridge up
