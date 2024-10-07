@@ -35,6 +35,8 @@ reboot
     - The vm will appear as in the same local network as the bridge device
 
 # For my tests
+Apply the [roundrobin](roundrobin-v6.12-rc2.patch) patch to the kernel source code before compiling to add a round robin scheduler to mptcp.
+
 ## Mptcp config
 In `.zprofile` or `.bash_profile`
 ```bash
