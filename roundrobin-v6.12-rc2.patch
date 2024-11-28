@@ -88,20 +88,36 @@ index c2317919fc14..41ae28d27de5 100644
 +	}
 +
 +	mptcp_for_each_subflow(msk, subflow) {
++		bool backup = subflow->backup || subflow->request_bkup;
++
 +		trace_mptcp_subflow_get_send(subflow);
 +		ssk =  mptcp_subflow_tcp_sock(subflow);
 +		if (!mptcp_subflow_active(subflow))
 +			continue;
 +
-+		if (!send_info[SSK_MODE_BACKUP].ssk)
++		if (!send_info[SSK_MODE_BACKUP].ssk && !backup)
 +			send_info[SSK_MODE_BACKUP].ssk = ssk;
-+		if (subflow->already_chosen)
++		if (subflow->already_chosen || backup)
 +			continue;
 +
 +		send_info[SSK_MODE_ACTIVE].ssk = ssk;
 +		break;
 +	}
 +	__mptcp_set_timeout(sk, tout);
++
++	// If no subflow was chosen as backup
++	// (as in the subflow to use when all active subflows have already been chosen),
++	// it means that there are no active subflows.
++	// Choose the first backup subflow available
++	if (!send_info[SSK_MODE_BACKUP].ssk) {
++		mptcp_for_each_subflow(msk, subflow) {
++			if (!mptcp_subflow_active(subflow))
++				continue;
++			ssk =  mptcp_subflow_tcp_sock(subflow);
++			send_info[SSK_MODE_BACKUP].ssk = ssk;
++			break;
++		}
++	}
 +
 +	// If all subflows were set as already chosen,
 +	// take the first subflow, and reset all subflows status
